@@ -5,6 +5,7 @@ import ControlPanel from './components/ControlPanel/ControlPanel';
 import Chart from './components/Chart/Chart';
 import { fetchCryptocurrencyData } from './utils/api';
 import MainContentWrapper from './AppStyles';
+import Footer from './components/Layout/Footer/Footer';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -42,6 +43,7 @@ const App = () => {
         <Chart data={filteredData} />
       </MainContentWrapper>
       <PriceList data={filteredData} />
+      <Footer />
     </div>
   );
 };
