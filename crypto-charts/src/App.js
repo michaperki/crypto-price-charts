@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Header from './components/Layout/Header/Header';
+import PriceList from './components/PriceList/PriceList';
+import ControlPanel from './components/ControlPanel/ControlPanel';
+import Chart from './components/Chart/Chart';
+import { fetchCryptocurrencyData } from './utils/api';
+import MainContentWrapper from './AppStyles';
 
-function App() {
+const App = () => {
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCryptocurrencyData();
+        setData(data);
+        setFilteredData(data);
+      } catch (error) {
+        console.error('Error fetching cryptocurrency data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleFilterChange = (filter) => {
+    const filtered = data.filter((item) =>
+      item.name.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    setFilteredData(filtered);
+  };
+
+  console.log(filteredData)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <MainContentWrapper>
+        <ControlPanel handleFilterChange={handleFilterChange} />
+        <Chart data={filteredData} />
+      </MainContentWrapper>
+      <PriceList data={filteredData} />
     </div>
   );
-}
+};
 
 export default App;
